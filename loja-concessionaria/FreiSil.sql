@@ -1,16 +1,19 @@
 CREATE SCHEMA loja1;
 
+CREATE DOMAIN loja1.tipo_cpf AS character varying(13);
+CREATE DOMAIN loja1.tipo_cnpj AS character varying(30);
+
 CREATE TABLE loja1.abastece (
     lote integer NOT NULL,
     data_entrega timestamp without time zone NOT NULL,
     produto_cod_produto3 integer NOT NULL,
-    fornecedor_cnpj character varying(30) DEFAULT NULL::character varying
+    fornecedor_cnpj loja1.tipo_cnpj DEFAULT NULL::character varying
 );
 
 CREATE TABLE loja1.administra (
-    funcionario_pessoa_cpf character varying(13) NOT NULL,
+    funcionario_pessoa_cpf loja1.tipo_cpf NOT NULL,
     cliente_cod_cliente integer NOT NULL,
-    cliente_pessoa_cpf character varying(13) NOT NULL
+    cliente_pessoa_cpf loja1.tipo_cpf NOT NULL
 );
 
 CREATE TABLE loja1.carro (
@@ -26,7 +29,7 @@ CREATE TABLE loja1.carro (
 CREATE TABLE loja1.cliente (
     cod_cliente integer NOT NULL,
     pts_fidelidade integer NOT NULL,
-    pessoa_cpf1 character varying(13) NOT NULL
+    pessoa_cpf1 loja1.tipo_cpf NOT NULL
 );
 
 
@@ -54,11 +57,11 @@ CREATE TABLE loja1.fidelidade (
     validade date NOT NULL,
     venda_nf1 integer NOT NULL,
     cliente_cod_cliente2 integer NOT NULL,
-    cliente_pessoa2_cpf character varying NOT NULL
+    cliente_pessoa2_cpf loja1.tipo_cpf NOT NULL
 );
 
 CREATE TABLE loja1.fornecedor (
-    cnpj character varying(30) NOT NULL,
+    cnpj character loja1.tipo_cnpj NOT NULL,
     nome character varying(45) NOT NULL,
     telefone character varying(16) NOT NULL,
     endereco character varying(200) NOT NULL
@@ -68,13 +71,13 @@ CREATE TABLE loja1.funcionario (
     curriculo character varying(255) NOT NULL,
     senha character varying(16) NOT NULL,
     salario double precision NOT NULL,
-    pessoa_cpf character varying(13) NOT NULL
+    pessoa_cpf loja1.tipo_cpf NOT NULL
 );
 
 CREATE TABLE loja1.mora (
     numero integer NOT NULL,
     complemento character varying(45) NOT NULL,
-    pessoa_cpf character varying(13) NOT NULL,
+    pessoa_cpf loja1.tipo_cpf NOT NULL,
     "endereço_cep" character varying(10) NOT NULL
 );
 
@@ -89,7 +92,7 @@ CREATE VIEW loja1.nome_view AS
    FROM loja1.carro;
 
 CREATE TABLE loja1.pessoa (
-    cpf character varying(13) NOT NULL,
+    cpf loja1.tipo_cpf NOT NULL,
     nome character varying(45) NOT NULL,
     sobrenome character varying(45) NOT NULL,
     rg character varying(11) NOT NULL,
@@ -124,8 +127,8 @@ CREATE TABLE loja1.possui (
 
 CREATE TABLE loja1.produto (
     cod_produto integer NOT NULL,
-    preco_venda double precision NOT NULL,
-    preco_custo double precision NOT NULL,
+    preco_venda double precision NOT NULL CHECK (preco_venda > 0),
+    preco_custo double precision NOT NULL CHECK (preco_custo > 0),
     data_compra date NOT NULL
 );
 
@@ -141,11 +144,11 @@ ALTER SEQUENCE loja1.produto_cod_produto_seq OWNED BY loja1.produto.cod_produto;
 
 CREATE TABLE loja1.venda (
     nf integer NOT NULL,
-    preco_total double precision NOT NULL,
+    preco_total double precision NOT NULL CHECK (preco_total > 0),
     data_venda date NOT NULL,
     cliente_cod_cliente1 integer NOT NULL,
-    funcionario_pessoa1_cpf character varying(13) NOT NULL,
-    cliente_pessoa1_cpf character varying(13) NOT NULL
+    funcionario_pessoa1_cpf loja1.tipo_cpf NOT NULL,
+    cliente_pessoa1_cpf loja1.tipo_cpf NOT NULL
 );
 
 ALTER TABLE ONLY loja1.cliente ALTER COLUMN cod_cliente SET DEFAULT nextval('loja1.cliente_cod_cliente_seq'::regclass);
