@@ -61,7 +61,7 @@ CREATE TABLE loja1.fidelidade (
 );
 
 CREATE TABLE loja1.fornecedor (
-    cnpj character loja1.tipo_cnpj NOT NULL,
+    cnpj loja1.tipo_cnpj NOT NULL,
     nome character varying(45) NOT NULL,
     telefone character varying(16) NOT NULL,
     endereco character varying(200) NOT NULL
