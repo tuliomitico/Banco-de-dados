@@ -11,3 +11,9 @@ AND schemaname != 'information_schema';
 --Definir o caminho de consulta em um schema
 
 set search_path to casas;	
+
+--Formatar cpf de uma maneira dificil
+
+SELECT SUBSTR(cpf, 1, 3) || '.' || SUBSTR(cpf, 4, 3) || '.' ||
+SUBSTR(cpf, 7, 3) || '-' || SUBSTR(cpf, 10) AS CPF
+FROM natural_person
