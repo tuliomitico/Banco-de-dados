@@ -158,10 +158,22 @@ ALTER TABLE ONLY loja1."peça" ALTER COLUMN cod_peca SET DEFAULT nextval('loja1.
 ALTER TABLE ONLY loja1.produto ALTER COLUMN cod_produto SET DEFAULT nextval('loja1.produto_cod_produto_seq'::regclass);
 
 INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465789, 'Onyx', 'Prata', 'Chevrolet', 123476, 13465789, 2015);
-
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465790, 'HB20', 'Preto', 'Hyundai', 123477, 13465790, 2013);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465791, 'EcoSport', 'Branco', 'Ford', 123478, 13465791, 2014);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465792, 'Camaro','Amarelo', 'Chevrolet', 123479, 13465792, 2010);
 
 INSERT INTO loja1.produto (cod_produto, preco_venda, preco_custo, data_compra) VALUES (13465789, 25000, 18000, '2018-10-15');
+INSERT INTO loja1.produto (cod_produto, preco_venda, preco_custo, data_compra) VALUES (13465790, 30000, 22000, '2018-12-02');
+INSERT INTO loja1.produto (cod_produto, preco_venda, preco_custo, data_compra) VALUES (13465791, 43000, 38000, '2019-01-30');
+INSERT INTO loja1.produto (cod_produto, preco_venda, preco_custo, data_compra) VALUES (13465792, 100000, 78000, '2019-02-21');
 
+INSERT INTO loja1.pessoa (cpf,nome,sobrenome,rg,telefone,email,data_nascimento) VALUES ('11122233344','Caio','Pinheiro Souza','11223344556','3213-6540','caio@gmail.com','1981-03-28');
+INSERT INTO loja1.pessoa (cpf,nome,sobrenome,rg,telefone,email,data_nascimento) VALUES ('11122233345','Francine','Sterling','11223344557','3220-7589','francine@live.com','1993-08-17');
+INSERT INTO loja1.pessoa (cpf,nome,sobrenome,rg,telefone,email,data_nascimento) VALUES ('11122233346','Diego','Rubens Silva','11223344558','99220-8975','diego@bol.com','1979-06-27');
+INSERT INTO loja1.pessoa (cpf,nome,sobrenome,rg,telefone,email,data_nascimento) VALUES ('11122233347','Kevin','Costa Pinto','11223344559','98890-3344','kevin@outlook.com','2000-04-01');
+
+INSERT INTO loja1.cliente (pts_fidelidade,pessoa_cpf1) VALUES (150,'11122233347');
+INSERT INTO loja1.cliente (pts_fidelidade,pessoa_cpf1) VALUES (260,'11122233345');
 
 ALTER TABLE ONLY loja1.abastece
     ADD CONSTRAINT abastece_pkey PRIMARY KEY (lote);
