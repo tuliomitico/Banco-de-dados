@@ -157,10 +157,10 @@ ALTER TABLE ONLY loja1."peça" ALTER COLUMN cod_peca SET DEFAULT nextval('loja1.
 
 ALTER TABLE ONLY loja1.produto ALTER COLUMN cod_produto SET DEFAULT nextval('loja1.produto_cod_produto_seq'::regclass);
 
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465789, 'Onyx', 'Prata', 'Chevrolet', 123476, 13465789, 2015);
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465790, 'HB20', 'Preto', 'Hyundai', 123477, 13465790, 2013);
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465791, 'EcoSport', 'Branco', 'Ford', 123478, 13465791, 2014);
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (13465792, 'Camaro','Amarelo', 'Chevrolet', 123479, 13465792, 2010);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465789, 'Onyx', 'Prata', 'Chevrolet', 123476, 13465789, 2015);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465790, 'HB20', 'Preto', 'Hyundai', 123477, 13465790, 2013);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465791, 'EcoSport', 'Branco', 'Ford', 123478, 13465791, 2014);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465792, 'Camaro','Amarelo', 'Chevrolet', 123479, 13465792, 2010);
 
 INSERT INTO loja1.produto (cod_produto, preco_venda, preco_custo, data_compra) VALUES (13465789, 25000, 18000, '2018-10-15');
 INSERT INTO loja1.produto (cod_produto, preco_venda, preco_custo, data_compra) VALUES (13465790, 30000, 22000, '2018-12-02');
