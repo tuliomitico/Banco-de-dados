@@ -1,5 +1,6 @@
 package bd1;
 import java.sql.*;
+import static java.lang.System.*;
 
 public class Bd1{
     public Connection setConnection() throws SQLException{
@@ -9,27 +10,27 @@ public class Bd1{
     String user = "aluno1";
     String password ="aluno1";
     Connection conexao = DriverManager.getConnection(url,user,password);
-    System.out.println("Criou a conexao");
+    out.println("Criou a conexao");
     return conexao;
     }
   public Bd1() {
     try{
     //carregar driver JDBC do postgres
     Class.forName("org.postgresql.Driver");
-    System.out.println("Carregou");
+    out.println("Carregou");
     } catch (ClassNotFOundException ex){ex.printStackTrace();}
   }
    public void exemploConsultaStatment(Connection conexao) throws
     SQLException{
     String sql = "Select cpf from universidade.professor where departamento = 'DCOMP'";
     Statement comando = conexao.createStatement();
-    System.out.println("Executar consulta: " + sql);
+    out.println("Executar consulta: " + sql);
     ResultSet resultado = comando.executeQuery(sql);
     while(resultado.next()){
         String cpf = resultado.getString("cpf");
         String cpf2 = resultado.getString(1);
         //String nome3 = resultado.getString(2);
-        System.out.println(cpf);
+        out.println(cpf);
         }
     comando.close();
     }   
