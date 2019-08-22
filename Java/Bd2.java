@@ -83,6 +83,7 @@ public class Bd1 {
         Connection con;
         try {con=teste.setConnection();
              teste.exemploConsultaStatment(con);
+	     con.close();
         } catch (SQLException e){e.printStackTrace();}
         
     }
