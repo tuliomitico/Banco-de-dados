@@ -104,7 +104,7 @@ CREATE TABLE loja1.pessoa (
 CREATE TABLE loja1."peça" (
     cod_peca integer NOT NULL,
     tipo character varying(20) NOT NULL,
-    nome character varying(15) NOT NULL,
+    nome character varying(25) NOT NULL,
     descricao character varying(200) NOT NULL,
     produto_cod_produto2 integer NOT NULL
 );
