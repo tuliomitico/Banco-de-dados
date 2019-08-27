@@ -22,8 +22,9 @@ CREATE TABLE loja1.carro (
     cor character varying(15) NOT NULL,
     marca character varying(45) NOT NULL,
     cod_veicular integer,
-    produto_cod_produto1 integer NOT NULL,
-    ano integer
+    cod_produto integer NOT NULL,
+    ano integer,
+    CONSTRAINT carro_pkey PRIMARY KEY (num_chassi)
 );
 
 CREATE TABLE loja1.cliente (
@@ -71,14 +72,15 @@ CREATE TABLE loja1.funcionario (
     curriculo character varying(255) NOT NULL,
     senha character varying(16) NOT NULL,
     salario double precision NOT NULL,
-    pessoa_cpf loja1.tipo_cpf NOT NULL
+    pessoa_cpf loja1.tipo_cpf NOT NULL,
+    CONSTRAINT funcionario_pkey PRIMARY KEY (pessoa_cpf)
 );
 
 CREATE TABLE loja1.mora (
     numero integer NOT NULL,
     complemento character varying(45) NOT NULL,
-    pessoa_cpf loja1.tipo_cpf NOT NULL,
-    "endereço_cep" character varying(10) NOT NULL
+    cpf loja1.tipo_cpf NOT NULL,
+    cep character varying(10) NOT NULL
 );
 
 CREATE VIEW loja1.nome_view AS
@@ -88,7 +90,7 @@ CREATE VIEW loja1.nome_view AS
     carro.ano,
     carro.cor,
     carro.cod_veicular,
-    carro.produto_cod_produto1
+    carro.cod_produto
    FROM loja1.carro;
 
 CREATE TABLE loja1.pessoa (
@@ -98,7 +100,8 @@ CREATE TABLE loja1.pessoa (
     rg character varying(11) NOT NULL,
     telefone character varying(16) NOT NULL,
     email character varying(30) NOT NULL,
-    data_nascimento date NOT NULL
+    data_nascimento date NOT NULL,
+    CONSTRAINT pessoa_pkey PRIMARY KEY (cpf)
 );
 
 CREATE TABLE loja1."peça" (
@@ -106,7 +109,7 @@ CREATE TABLE loja1."peça" (
     tipo character varying(20) NOT NULL,
     nome character varying(25) NOT NULL,
     descricao character varying(200) NOT NULL,
-    produto_cod_produto2 integer NOT NULL
+    cod_produto integer NOT NULL
 );
 
 CREATE SEQUENCE loja1."peça_cod_peca_seq"
@@ -122,7 +125,7 @@ ALTER SEQUENCE loja1."peça_cod_peca_seq" OWNED BY loja1."peça".cod_peca;
 CREATE TABLE loja1.possui (
     quantidade integer NOT NULL,
     venda_nf integer NOT NULL,
-    produto_cod_produto integer NOT NULL
+    cod_produto integer NOT NULL
 );
 
 CREATE TABLE loja1.produto (
@@ -163,9 +166,6 @@ ALTER TABLE ONLY loja1.abastece
 ALTER TABLE ONLY loja1.administra
     ADD CONSTRAINT administra_pkey PRIMARY KEY (funcionario_pessoa_cpf, cliente_cod_cliente, cliente_pessoa_cpf);
 
-ALTER TABLE ONLY loja1.carro
-    ADD CONSTRAINT carro_pkey PRIMARY KEY (num_chassi);
-
 ALTER TABLE ONLY loja1.cliente
     ADD CONSTRAINT cliente_pkey PRIMARY KEY (cod_cliente);
 
@@ -178,17 +178,11 @@ ALTER TABLE ONLY loja1.fidelidade
 ALTER TABLE ONLY loja1.fornecedor
     ADD CONSTRAINT fornecedor_pkey PRIMARY KEY (cnpj);
 
-ALTER TABLE ONLY loja1.funcionario
-    ADD CONSTRAINT funcionario_pkey PRIMARY KEY (pessoa_cpf);
-
 ALTER TABLE ONLY loja1.mora
     ADD CONSTRAINT mora_pkey PRIMARY KEY (numero);
 
 ALTER TABLE ONLY loja1.cliente
     ADD CONSTRAINT pessoa_cpf1_un UNIQUE (pessoa_cpf1);
-
-ALTER TABLE ONLY loja1.pessoa
-    ADD CONSTRAINT pessoa_pkey PRIMARY KEY (cpf);
 
 ALTER TABLE ONLY loja1."peça"
     ADD CONSTRAINT "peça_pkey" PRIMARY KEY (cod_peca);
@@ -227,27 +221,27 @@ ALTER TABLE ONLY loja1.funcionario
     ADD CONSTRAINT funcionario_pessoa_cpf_fkey FOREIGN KEY (pessoa_cpf) REFERENCES loja1.pessoa(cpf);
 
 ALTER TABLE ONLY loja1.mora
-    ADD CONSTRAINT "mora_endereço_cep_fkey" FOREIGN KEY ("endereço_cep") REFERENCES loja1."endereço"(cep);
+    ADD CONSTRAINT "mora_endereço_cep_fkey" FOREIGN KEY (cep) REFERENCES loja1."endereço"(cep);
 
 ALTER TABLE ONLY loja1.mora
-    ADD CONSTRAINT mora_pessoa_cpf_fkey FOREIGN KEY (pessoa_cpf) REFERENCES loja1.pessoa(cpf);
+    ADD CONSTRAINT mora_pessoa_cpf_fkey FOREIGN KEY (cpf) REFERENCES loja1.pessoa(cpf);
 
 ALTER TABLE ONLY loja1."peça"
-    ADD CONSTRAINT "peça_produto_cod_produto2_fkey" FOREIGN KEY (produto_cod_produto2) REFERENCES loja1.produto(cod_produto);
+    ADD CONSTRAINT "peça_produto_cod_produto2_fkey" FOREIGN KEY (cod_produto) REFERENCES loja1.produto(cod_produto);
 
 ALTER TABLE ONLY loja1.possui
-    ADD CONSTRAINT possui_produto_cod_produto_fkey FOREIGN KEY (produto_cod_produto) REFERENCES loja1.produto(cod_produto);
+    ADD CONSTRAINT possui_produto_cod_produto_fkey FOREIGN KEY (cod_produto) REFERENCES loja1.produto(cod_produto);
 
 ALTER TABLE ONLY loja1.possui
     ADD CONSTRAINT possui_venda_nf_fkey FOREIGN KEY (venda_nf) REFERENCES loja1.venda(nf);
 
 ALTER TABLE ONLY loja1.carro
-    ADD CONSTRAINT produto_cod_produto1 FOREIGN KEY (produto_cod_produto1) REFERENCES loja1.produto(cod_produto);
+    ADD CONSTRAINT produto_cod_produto_fkey FOREIGN KEY (cod_produto) REFERENCES loja1.produto(cod_produto);
 
 ALTER TABLE ONLY loja1.venda
     ADD CONSTRAINT venda_cliente_cod_cliente1_fkey FOREIGN KEY (cliente_cod_cliente1) REFERENCES loja1.cliente(cod_cliente);
 
-ALTER TABLE ONLY loja1.venda
+ALTER table ONLY loja1.venda
     ADD CONSTRAINT venda_funcionario_pessoa1_cpf_fkey FOREIGN KEY (funcionario_pessoa1_cpf) REFERENCES loja1.funcionario(pessoa_cpf);
 
 ALTER TABLE ONLY loja1.venda
@@ -294,31 +288,31 @@ INSERT INTO loja1.fornecedor (cnpj, nome, telefone, endereco) VALUES ('32.777.12
 INSERT INTO loja1.fornecedor (cnpj, nome, telefone, endereco) VALUES ('32.777.123/9821-31', 'Hyundai', '(41)99198-9848', 'Rua Carmelina, 908, Santos Drummont');
 
 --CARRO
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465789, 'Onyx', 'Prata', 'Chevrolet', 123476, 13465789, 2015);
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465790, 'HB20', 'Preto', 'Hyundai', 123477, 13465790, 2013);
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465791, 'EcoSport', 'Branco', 'Ford', 123478, 13465791, 2014);
-INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, produto_cod_produto1, ano) VALUES (23465792, 'Camaro','Amarelo', 'Chevrolet', 123479, 13465792, 2010);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, cod_produto, ano) VALUES (23465789, 'Onyx', 'Prata', 'Chevrolet', 123476, 13465789, 2015);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, cod_produto, ano) VALUES (23465790, 'HB20', 'Preto', 'Hyundai', 123477, 13465790, 2013);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, cod_produto, ano) VALUES (23465791, 'EcoSport', 'Branco', 'Ford', 123478, 13465791, 2014);
+INSERT INTO loja1.carro (num_chassi, modelo, cor, marca, cod_veicular, cod_produto, ano) VALUES (23465792, 'Camaro','Amarelo', 'Chevrolet', 123479, 13465792, 2010);
 
 --PECA
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(1, 'Acessório Exterior', 'Farol dianteiro', 'Farol dianteiro de Onyx', 13465793);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(2, 'Acessório Exterior', 'Farol traseiro', 'Farol traseiro de Onyx', 13465794);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(3, 'Acessório Exterior', 'Espelho retrovisor', 'Espelho retrovisor de Onyx', 13465795);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(4, 'Acessório Exterior', 'Emblema Chevrolet', 'Emblema Chevrolet', 13465796);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(5, 'Acessório Exterior', 'Emblema Ford', 'Emblema Ford', 13465797);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(6, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha preto', 13465798);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(7, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha preto', 13465799);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(8, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha cinza', 13465800);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(9, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha cinza', 13465801);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(10, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha cinza', 13465802);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(11, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465803);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(12, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465804);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(13, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465805);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(14, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465806);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(15, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465807);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(16, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465808);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(17, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465809);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(18, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465810);
-INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, produto_cod_produto2) VALUES(19, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465811);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(1, 'Acessório Exterior', 'Farol dianteiro', 'Farol dianteiro de Onyx', 13465793);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(2, 'Acessório Exterior', 'Farol traseiro', 'Farol traseiro de Onyx', 13465794);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(3, 'Acessório Exterior', 'Espelho retrovisor', 'Espelho retrovisor de Onyx', 13465795);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(4, 'Acessório Exterior', 'Emblema Chevrolet', 'Emblema Chevrolet', 13465796);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(5, 'Acessório Exterior', 'Emblema Ford', 'Emblema Ford', 13465797);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(6, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha preto', 13465798);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(7, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha preto', 13465799);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(8, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha cinza', 13465800);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(9, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha cinza', 13465801);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(10, 'Acessório Interior', 'Tapete Ford', 'Tapete de borracha cinza', 13465802);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(11, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465803);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(12, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465804);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(13, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465805);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(14, 'Acessório Interior', 'Pestana interna', 'Pestana interna para Onyx', 13465806);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(15, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465807);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(16, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465808);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(17, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465809);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(18, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465810);
+INSERT INTO loja1."peça" (cod_peca, tipo, nome, descricao, cod_produto) VALUES(19, 'Acessório Interior', 'Maçaneta interna', 'Maçaneta interna para Onyx', 13465811);
 
 --ABASTECE
 INSERT INTO loja1.abastece (lote, data_entrega, produto_cod_produto3, fornecedor_cnpj) VALUES(1, '2019-01-12', 13465789, '32.777.123/9821-27');
@@ -406,24 +400,24 @@ INSERT INTO loja1.fidelidade (cod_fidelidade, qtd_ponto, validade, venda_nf1, cl
 INSERT INTO loja1.fidelidade (cod_fidelidade, qtd_ponto, validade, venda_nf1, cliente_cod_cliente2, cliente_pessoa2_cpf) VALUES(11, 10, '2022-01-01', 11, 3, '11122233346');
 
 --POSSUI
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (1, 13465793, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (2, 13465795, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (3, 13465793, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (3, 13465795, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (4, 13465793, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (4, 13465797, 4);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (5, 13465794, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (5, 13465798, 2);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (5, 13465799, 4);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (6, 13465795, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (7, 13465791, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (8, 13465798, 4);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (8, 13465799, 4);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (9, 13465795, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (9, 13465796, 2);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (9, 13465799, 2);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (10, 13465790, 1);
-INSERT INTO loja1.possui (venda_nf, produto_cod_produto, quantidade) VALUES (11, 13465806, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (1, 13465793, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (2, 13465795, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (3, 13465793, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (3, 13465795, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (4, 13465793, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (4, 13465797, 4);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (5, 13465794, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (5, 13465798, 2);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (5, 13465799, 4);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (6, 13465795, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (7, 13465791, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (8, 13465798, 4);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (8, 13465799, 4);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (9, 13465795, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (9, 13465796, 2);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (9, 13465799, 2);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (10, 13465790, 1);
+INSERT INTO loja1.possui (venda_nf, cod_produto, quantidade) VALUES (11, 13465806, 1);
 
 
 --ADMINISTRA
@@ -454,19 +448,18 @@ INSERT INTO loja1."endereço" (cep, logradouro, bairro, cidade, estado) VALUES (
 INSERT INTO loja1."endereço" (cep, logradouro, bairro, cidade, estado) VALUES ('49025-938', 'Rua Fogos', 'Jardins', 'Aracaju', 'SE');
 
 --MORA
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (10, '', '11122233344', '49025-025');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (11, '', '11122233345', '49025-026');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (12, '', '11122233346', '49025-027');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (13, '', '11122233347', '49025-028');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (14, '', '11122233348', '49025-029');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (122, '', '11122233349', '49025-030');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (158, '', '11122233350', '49025-031');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (40, '', '11122233351', '49025-032');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (250, '', '11122233352', '49025-033');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (364, '', '11122233353', '49025-234');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (33, '', '11122233354', '49025-035');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (15, '', '11122233355', '49025-136');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (45, '', '11122233356', '49025-237');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (354, '', '11122233357', '49025-938');
-
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (10, '', '11122233344', '49025-025');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (11, '', '11122233345', '49025-026');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (12, '', '11122233346', '49025-027');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (13, '', '11122233347', '49025-028');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (14, '', '11122233348', '49025-029');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (122, '', '11122233349', '49025-030');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (158, '', '11122233350', '49025-031');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (40, '', '11122233351', '49025-032');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (250, '', '11122233352', '49025-033');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (364, '', '11122233353', '49025-234');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (33, '', '11122233354', '49025-035');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (15, '', '11122233355', '49025-136');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (45, '', '11122233356', '49025-237');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (354, '', '11122233357', '49025-938');
 
