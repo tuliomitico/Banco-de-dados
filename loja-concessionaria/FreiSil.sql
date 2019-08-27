@@ -77,8 +77,8 @@ CREATE TABLE loja1.funcionario (
 CREATE TABLE loja1.mora (
     numero integer NOT NULL,
     complemento character varying(45) NOT NULL,
-    pessoa_cpf loja1.tipo_cpf NOT NULL,
-    "endereço_cep" character varying(10) NOT NULL
+    cpf loja1.tipo_cpf NOT NULL,
+    cep character varying(10) NOT NULL
 );
 
 CREATE VIEW loja1.nome_view AS
@@ -227,10 +227,10 @@ ALTER TABLE ONLY loja1.funcionario
     ADD CONSTRAINT funcionario_pessoa_cpf_fkey FOREIGN KEY (pessoa_cpf) REFERENCES loja1.pessoa(cpf);
 
 ALTER TABLE ONLY loja1.mora
-    ADD CONSTRAINT "mora_endereço_cep_fkey" FOREIGN KEY ("endereço_cep") REFERENCES loja1."endereço"(cep);
+    ADD CONSTRAINT "mora_endereço_cep_fkey" FOREIGN KEY (cep) REFERENCES loja1."endereço"(cep);
 
 ALTER TABLE ONLY loja1.mora
-    ADD CONSTRAINT mora_pessoa_cpf_fkey FOREIGN KEY (pessoa_cpf) REFERENCES loja1.pessoa(cpf);
+    ADD CONSTRAINT mora_pessoa_cpf_fkey FOREIGN KEY (cpf) REFERENCES loja1.pessoa(cpf);
 
 ALTER TABLE ONLY loja1."peça"
     ADD CONSTRAINT "peça_produto_cod_produto2_fkey" FOREIGN KEY (produto_cod_produto2) REFERENCES loja1.produto(cod_produto);
@@ -454,19 +454,18 @@ INSERT INTO loja1."endereço" (cep, logradouro, bairro, cidade, estado) VALUES (
 INSERT INTO loja1."endereço" (cep, logradouro, bairro, cidade, estado) VALUES ('49025-938', 'Rua Fogos', 'Jardins', 'Aracaju', 'SE');
 
 --MORA
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (10, '', '11122233344', '49025-025');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (11, '', '11122233345', '49025-026');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (12, '', '11122233346', '49025-027');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (13, '', '11122233347', '49025-028');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (14, '', '11122233348', '49025-029');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (122, '', '11122233349', '49025-030');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (158, '', '11122233350', '49025-031');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (40, '', '11122233351', '49025-032');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (250, '', '11122233352', '49025-033');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (364, '', '11122233353', '49025-234');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (33, '', '11122233354', '49025-035');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (15, '', '11122233355', '49025-136');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (45, '', '11122233356', '49025-237');
-INSERT INTO loja1.mora (numero, complemento, pessoa_cpf, "endereço_cep") VALUES (354, '', '11122233357', '49025-938');
-
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (10, '', '11122233344', '49025-025');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (11, '', '11122233345', '49025-026');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (12, '', '11122233346', '49025-027');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (13, '', '11122233347', '49025-028');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (14, '', '11122233348', '49025-029');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (122, '', '11122233349', '49025-030');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (158, '', '11122233350', '49025-031');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (40, '', '11122233351', '49025-032');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (250, '', '11122233352', '49025-033');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (364, '', '11122233353', '49025-234');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (33, '', '11122233354', '49025-035');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (15, '', '11122233355', '49025-136');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (45, '', '11122233356', '49025-237');
+INSERT INTO loja1.mora (numero, complemento, cpf, cep) VALUES (354, '', '11122233357', '49025-938');
 
