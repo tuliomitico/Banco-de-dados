@@ -16,3 +16,21 @@ where pro.preco_venda > 29000
 
 select mo.cep,mo.numero,mo.cpf,pe.nome 
 from mora as mo join endereço as en using (cep) join pessoa as pe on (mo.cpf = pe.cpf);
+
+--Listar media do preço de custo dos carros
+
+select avg(preco_custo) from produto as pro join carro as ca using (cod_produto);
+
+--Listar o numero de todos os clientes
+
+select count(pessoa_cpf1) from cliente;
+
+--Listar nome dos funcionários(as) que começam com 'sa'
+
+select * from (select pe.nome,pe.sobrenome 
+from pessoa as pe join funcionario as fu on (pe.cpf=fu.pessoa_cpf))
+as nome_fun where nome ilike 'sa%';
+
+--Listar as vendas que aconteceram entre o 2º trimestre de 2019
+
+select * from venda where data_venda > '2019-03-31' and data_venda < '2019-06-30';
