@@ -53,7 +53,7 @@ from fornecedor fo join abastece ab using (cnpj) order by data_entrega ASC;
 --Listar os nomes e sobrenomes dos funcionarios que estão administrando algum cliente
 
 select pe.nome,pe.sobrenome from pessoa pe
-join funcionario fu using (cpf) where fu.cpf in (select ad.funcionario_pessoa_cpf from  
+natural join funcionario fu where fu.cpf in (select ad.funcionario_pessoa_cpf from  
 									administra ad);
 
 --Listar nome e sobrenomes dos clientes que não são administrados
@@ -71,10 +71,9 @@ group by v.nf;
 --Listar todas as peças que não foram vendidas
 
 select pe.nome,pe.tipo,pe.descricao,pe.cod_peca
-from peça as pe where cod_produto not in (select pr.cod_produto from 
-										   produto pr join possui po 
-										  		on (pr.cod_produto = po.produto_cod_produto) 
-										   join venda v on (v.nf=po.venda_nf));
+from peça as pe where cod_produto not in (select pr.cod_produto from produto pr join possui po 
+						on (pr.cod_produto = po.produto_cod_produto) 
+					 join venda v on (v.nf=po.venda_nf));
 
 --Listar o suposto lucro dos tapetes da Ford com precisão de 2 digitos
 
