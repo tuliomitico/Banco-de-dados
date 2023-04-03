@@ -49,7 +49,7 @@ select nome_agencia, nome_cliente, count(nome_cliente)
 from deposito group by nome_agencia, nome_cliente;
 
 --Solução:
-select nome_agencia, count( nome_cliente)
+select nome_agencia, count(distinct nome_cliente)
 from deposito
 group by nome_agencia;
 
